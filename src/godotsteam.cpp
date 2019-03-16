@@ -1028,7 +1028,7 @@ void Steam::_file_details_result(FileDetailsResult_t* fileData){
 	uint64_t fileSize = fileData->m_ulFileSize;
 	int fileHash = fileData->m_FileSHA[20];
 	uint32_t flags = fileData->m_unFlags;
-	owner->emit_signal("file_details_result", result, fileSize, fileHash, flags);
+	emit_signal("file_details_result", result, fileSize, fileHash, flags);
 }
 // Signal the lobby has been created.
 void Steam::_lobby_created(LobbyCreated_t* lobbyData, bool bIOFailure){
@@ -1053,7 +1053,7 @@ void Steam::_lobby_created(LobbyCreated_t* lobbyData, bool bIOFailure){
 		connect = LOBBY_LIMIT_EXCEEDED;
 	}
 	uint64_t lobbyID = (uint64_t) lobbyData->m_ulSteamIDLobby;
-	owner->emit_signal("lobby_created", connect, lobbyID);
+	emit_signal("lobby_created", connect, lobbyID);
 }
 // Sets lobby data
 bool Steam::setLobbyData(uint64_t lobbyID, String key, String value) {
@@ -1089,7 +1089,7 @@ void Steam::_lobby_match_list(LobbyMatchList_t *pCallback, bool bIOFailure) {
 		entryDict["steamIDLobby"] = lobbyID;
 		listLobbies.append(entryDict);
 	}
-	owner->emit_signal("lobby_match_list");
+	emit_signal("lobby_match_list");
 }
 // Signal that lobby has been joined.
 void Steam::_lobby_joined(LobbyEnter_t* lobbyData, bool bIOFailure){
@@ -1098,20 +1098,20 @@ void Steam::_lobby_joined(LobbyEnter_t* lobbyData, bool bIOFailure){
 	bool locked = lobbyData->m_bLocked;
 	uint32_t response = lobbyData->m_EChatRoomEnterResponse;
 	bool connection_failure = bIOFailure || (lobbyData->m_EChatRoomEnterResponse != k_EChatRoomEnterResponseSuccess);
-	owner->emit_signal("lobby_joined", lobbyID, permissions, locked, response, connection_failure);
+	emit_signal("lobby_joined", lobbyID, permissions, locked, response, connection_failure);
 }
 // Signal that a lobby invite was sent.
 void Steam::_lobby_invite(LobbyInvite_t* lobbyData){
 	uint64_t inviterID = (uint64_t)lobbyData->m_ulSteamIDUser;
 	uint64_t lobbyID = (uint64_t)lobbyData->m_ulSteamIDLobby;
 	uint64_t gameID = (uint64_t)lobbyData->m_ulGameID;
-	owner->emit_signal("lobby_invite", inviterID, lobbyID, gameID);
+	emit_signal("lobby_invite", inviterID, lobbyID, gameID);
 }
 // Signal a game/lobby join has been requested.
 void Steam::_join_requested(GameRichPresenceJoinRequested_t* callData){
 	int steamID = callData->m_steamIDFriend.GetAccountID();
 	String con_string = callData->m_rgchConnect;
-	owner->emit_signal("join_requested", steamID, con_string);
+	emit_signal("join_requested", steamID, con_string);
 }
 // Signal that the avatar has been loaded.
 void Steam::_avatar_loaded(AvatarImageLoaded_t* avatarData){
@@ -1142,17 +1142,17 @@ void Steam::_avatar_loaded(AvatarImageLoaded_t* avatarData){
 		return;
 	}
 	Image avatar = drawAvatar(size, buffer);
-//	call_deferred("owner->emit_signal", "avatar_loaded", avatarSize, avatar);	Temporarily disabled because of Image change in Godot.
+//	call_deferred("emit_signal", "avatar_loaded", avatarSize, avatar);	Temporarily disabled because of Image change in Godot.
 }
 // Signal number of current players (online + offline).
 void Steam::_number_of_current_players(NumberOfCurrentPlayers_t *callData, bool bIOFailure){
-	owner->emit_signal("number_of_current_players", callData->m_bSuccess && bIOFailure, callData->m_cPlayers);
+	emit_signal("number_of_current_players", callData->m_bSuccess && bIOFailure, callData->m_cPlayers);
 }
 // Signal a leaderboard has been loaded or has failed.
 void Steam::_leaderboard_loaded(LeaderboardFindResult_t *callData, bool bIOFailure){
 	leaderboard_handle = callData->m_hSteamLeaderboard;
 	uint8_t found = callData->m_bLeaderboardFound;
-	owner->emit_signal("leaderboard_loaded", (uint64_t)leaderboard_handle, found);
+	emit_signal("leaderboard_loaded", (uint64_t)leaderboard_handle, found);
 }
 // Signal a leaderboard entry has been uploaded.
 void Steam::_leaderboard_uploaded(LeaderboardScoreUploaded_t *callData, bool bIOFailure){
@@ -1160,7 +1160,7 @@ void Steam::_leaderboard_uploaded(LeaderboardScoreUploaded_t *callData, bool bIO
 	if(callData->m_hSteamLeaderboard != leaderboard_handle){
 		return;
 	}
-	owner->emit_signal("leaderboard_uploaded", callData->m_bSuccess && bIOFailure, callData->m_nScore, callData->m_bScoreChanged, callData->m_nGlobalRankNew, callData->m_nGlobalRankPrevious);
+	emit_signal("leaderboard_uploaded", callData->m_bSuccess && bIOFailure, callData->m_nScore, callData->m_bScoreChanged, callData->m_nGlobalRankNew, callData->m_nGlobalRankPrevious);
 }
 // Signal leaderboard entries are downloaded.
 void Steam::_leaderboard_entries_loaded(LeaderboardScoresDownloaded_t *callData, bool bIOFailure){
@@ -1169,58 +1169,58 @@ void Steam::_leaderboard_entries_loaded(LeaderboardScoresDownloaded_t *callData,
 		return;
 	}
 	getDownloadedLeaderboardEntry(callData->m_hSteamLeaderboardEntries, callData->m_cEntryCount);
-	owner->emit_signal("leaderboard_entries_loaded");
+	emit_signal("leaderboard_entries_loaded");
 }
 // Signal when overlay is triggered.
 void Steam::_overlay_toggled(GameOverlayActivated_t* callData){
 	if(callData->m_bActive){
-		owner->emit_signal("overlay_toggled", true);
+		emit_signal("overlay_toggled", true);
 	}
 	else{
-		owner->emit_signal("overlay_toggled", false);
+		emit_signal("overlay_toggled", false);
 	}
 }
 // Signal when battery power is running low, less than 10 minutes left.
 void Steam::_low_power(LowBatteryPower_t* timeLeft){
 	uint8 power = timeLeft->m_nMinutesBatteryLeft;
-	owner->emit_signal("low_power", power);
+	emit_signal("low_power", power);
 }
 // When connected to a server.
 void Steam::_server_connected(SteamServersConnected_t* connectData){
-	owner->emit_signal("connection_changed", true);
+	emit_signal("connection_changed", true);
 }
 // When disconnected from a server.
 void Steam::_server_disconnected(SteamServersDisconnected_t* connectData){
-	owner->emit_signal("connection_changed", false);
+	emit_signal("connection_changed", false);
 }
 // Posted after the user gains ownership of DLC & that DLC is installed.
 void Steam::_dlc_installed(DlcInstalled_t* callData){
 	int appID = (AppId_t)callData->m_nAppID;
-	owner->emit_signal("dlc_installed", appID);
+	emit_signal("dlc_installed", appID);
 }
 // Response from getAuthSessionTicket.
 void Steam::_get_auth_session_ticket_response(GetAuthSessionTicketResponse_t* callData){
-	owner->emit_signal("get_auth_session_ticket_response", callData->m_hAuthTicket, callData->m_eResult);
+	emit_signal("get_auth_session_ticket_response", callData->m_hAuthTicket, callData->m_eResult);
 }
 // Called when an auth ticket has been validated.
 void Steam::_validate_auth_ticket_response(ValidateAuthTicketResponse_t* callData){
 	uint64_t authID = callData->m_SteamID.ConvertToUint64();
 	uint32_t response = callData->m_eAuthSessionResponse;
 	uint64_t ownerID = callData->m_OwnerSteamID.ConvertToUint64();
-	owner->emit_signal("validate_auth_ticket_response", authID, response, ownerID);
+	emit_signal("validate_auth_ticket_response", authID, response, ownerID);
 }
 // A screenshot has been requested by the user.
 void Steam::_screenshot_ready(ScreenshotReady_t* callData){
 	uint32_t handle = callData->m_hLocal;
 	uint32_t result = callData->m_eResult;
-	owner->emit_signal("screenshot_ready", handle, result);
+	emit_signal("screenshot_ready", handle, result);
 }
 // User stats are ready.
 void Steam::_user_stats_received(UserStatsReceived_t* callData){
 	uint64_t gameID = callData->m_nGameID;
 	uint32_t result = callData->m_eResult;
 	uint64_t userID = callData->m_steamIDUser.ConvertToUint64();
-	owner->emit_signal("user_stats_received", gameID, result, userID);
+	emit_signal("user_stats_received", gameID, result, userID);
 }
 // Result of an achievement icon that has been fetched.
 void Steam::_user_achievement_icon_fetched(UserAchievementIconFetched_t* callData){
@@ -1228,32 +1228,32 @@ void Steam::_user_achievement_icon_fetched(UserAchievementIconFetched_t* callDat
 	String achievementName = callData->m_rgchAchievementName;
 	bool achieved = callData->m_bAchieved;
 	int iconHandle = callData->m_nIconHandle;
-	owner->emit_signal("user_achievement_icon_fetched", gameID, achievementName, achieved, iconHandle);
+	emit_signal("user_achievement_icon_fetched", gameID, achievementName, achieved, iconHandle);
 }
 // Global achievements percentages are ready.
 void Steam::_global_achievement_percentages_ready(GlobalAchievementPercentagesReady_t* callData, bool bIOFailure){
 	uint64_t gameID = callData->m_nGameID;
 	uint32_t result = callData->m_eResult;
-	owner->emit_signal("global_achievement_percentages_ready", gameID, result);
+	emit_signal("global_achievement_percentages_ready", gameID, result);
 }
 // Result of a workshop item being created.
 void Steam::_workshop_item_created(CreateItemResult_t *callData, bool bIOFailure){
 	EResult result = callData->m_eResult;
 	PublishedFileId_t fileID = callData->m_nPublishedFileId;
 	bool acceptTOS = callData->m_bUserNeedsToAcceptWorkshopLegalAgreement;
-	owner->emit_signal("workshop_item_created", result, (uint64_t)fileID, acceptTOS);
+	emit_signal("workshop_item_created", result, (uint64_t)fileID, acceptTOS);
 }
 // Result of a workshop item being updated.
 void Steam::_workshop_item_updated(SubmitItemUpdateResult_t *callData, bool bIOFailure){
 	EResult result = callData->m_eResult;
 	bool acceptTOS = callData->m_bUserNeedsToAcceptWorkshopLegalAgreement;
-	owner->emit_signal("workshop_item_updated", result, acceptTOS);
+	emit_signal("workshop_item_updated", result, acceptTOS);
 }
 // Called when a workshop item has been installed or updated.
 void Steam::_workshop_item_installed(ItemInstalled_t* callData){
 	AppId_t appID = callData->m_unAppID;
 	PublishedFileId_t fileID = callData->m_nPublishedFileId;
-	owner->emit_signal("workshop_item_installed", appID, (uint64_t)fileID);
+	emit_signal("workshop_item_installed", appID, (uint64_t)fileID);
 }
 /////////////////////////////////////////////////
 ///// USERS /////////////////////////////////////

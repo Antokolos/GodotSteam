@@ -2,13 +2,13 @@
 #define GODOTSTEAM_H
 
 #include <inttypes.h>
-#include "steam/steam_gameserver.h"
-#include "steam/steam_api.h"
+#include <steam/steam_gameserver.h>
+#include <steam/steam_api.h>
 
-#include "core/Godot.hpp"
-#include "Reference.hpp"
-#include "Image.hpp"			// For avatars; perhaps should be Texture.hpp
-#include "core/Dictionary.hpp" 	// Contains array.h as well
+#include <Godot.hpp>
+#include <Reference.hpp>
+#include <Image.hpp>			// For avatars; perhaps should be Texture.hpp
+#include <Dictionary.hpp> 	// Contains array.h as well
 
 //#define USE_GS_AUTH_API
 
@@ -17,8 +17,8 @@
 
 using namespace godot;
 
-class Steam : public GodotScript<Reference>{
-	GODOT_CLASS(Steam);
+class Steam : public Reference {
+	GODOT_CLASS(Steam, Reference);
 
 	public:
 		enum {
@@ -44,6 +44,9 @@ class Steam : public GodotScript<Reference>{
 		static Steam *get_singleton();
 		Steam();
 		~Steam();
+
+		/* _init must exist as it is called by Godot */
+		void _init() { }
 
 		CSteamID createSteamID(uint32_t steamID, int accountType/*=-1*/);
 		CSteamID createSteamID(uint64_t steamID);
@@ -234,7 +237,6 @@ class Steam : public GodotScript<Reference>{
 	//	bool getItemDownloadInfo(int fileID, uint64_t *bytesDownloaded, uint64_t *bytesTotal);
 
 	protected:
-		static void _bind_methods();
 		static Steam *singleton;
 
 	private:
