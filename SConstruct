@@ -105,7 +105,7 @@ if target_platform == 'osx':
 	# Set correct Steam library
 	steam_lib_path += "/osx32"
 # Append the last paths
-env.Append(CPPPATH = [ '.', 'src', 'include', godot_headers, cpp_bindings + '/include', cpp_bindings + '/include/core', 'include/sdk/public' ])
+env.Append(CPPPATH = [ '.', 'src', 'include', godot_headers, cpp_bindings + '/include', cpp_bindings + '/include/core', cpp_bindings + '/include/gen', 'include/sdk/public' ])
 env.Append(LIBS = [ steam_lib ])
 env.Append(LIBPATH = [ cpp_bindings + '/include', cpp_bindings + '/bin', 'lib', steam_lib_path ])
 # Finally add the CPP sources
