@@ -425,6 +425,15 @@ class Steam : public Reference {
 			register_method("getLobbyData", &Steam::getLobbyData);
 			register_method("getNumLobbyMembers", &Steam::getNumLobbyMembers);
 			register_method("getLobbyMembersData", &Steam::getLobbyMembersData);
+			// P2P Bind Methods /////////////////
+			register_method("acceptP2PSessionWithUser", &Steam::acceptP2PSessionWithUser);
+			register_method("allowP2PPacketRelay", &Steam::allowP2PPacketRelay);
+			register_method("closeP2PChannelWithUser", &Steam::closeP2PChannelWithUser);
+			register_method("closeP2PSessionWithUser", &Steam::closeP2PSessionWithUser);
+			register_method("getP2PSessionState", &Steam::getP2PSessionState);
+			register_method("getAvailableP2PPacketSize", &Steam::getAvailableP2PPacketSize);
+			register_method("readP2PPacket", &Steam::readP2PPacket);
+			register_method("sendP2PPacket", &Steam::sendP2PPacket);
 			// Music Bind Methods ///////////////////////
 			register_method("musicIsEnabled", &Steam::musicIsEnabled);
 			register_method("musicIsPlaying", &Steam::musicIsPlaying);
