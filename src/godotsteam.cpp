@@ -943,7 +943,7 @@ bool Steam::sendP2PPacket(uint64_t steamIDRemote, const PoolByteArray& vData, in
 		return false;
 	}
 	CSteamID steamID = createSteamID(steamIDRemote);
-	return SteamNetworking()->SendP2PPacket(steamIDRemote, vData.read().ptr(), cubData, EP2PSend(eP2PSendType), nChannel);
+	return SteamNetworking()->SendP2PPacket(steamID, vData.read().ptr(), cubData, EP2PSend(eP2PSendType), nChannel);
 }
 
 /**
