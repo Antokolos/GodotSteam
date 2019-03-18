@@ -938,12 +938,12 @@ PoolByteArray Steam::readP2PPacket(uint32_t cubDest, uint64_t steamIDRemote, int
  * The target Steam ID is not valid.
  * There are too many bytes queued up to be sent.
  */
-bool Steam::sendP2PPacket(uint64_t steamIDRemote, const PoolByteArray& vData, int32_t cubData, int eP2PSendType, int nChannel) {
+bool Steam::sendP2PPacket(uint64_t steamIDRemote, PoolByteArray vData, int eP2PSendType, int nChannel) {
 	if (SteamNetworking() == NULL) {
 		return false;
 	}
 	CSteamID steamID = createSteamID(steamIDRemote);
-	return SteamNetworking()->SendP2PPacket(steamID, vData.read().ptr(), cubData, EP2PSend(eP2PSendType), nChannel);
+	return SteamNetworking()->SendP2PPacket(steamID, vData.read().ptr(), vData.size(), EP2PSend(eP2PSendType), nChannel);
 }
 
 /**
