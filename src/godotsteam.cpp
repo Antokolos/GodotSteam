@@ -894,7 +894,7 @@ uint32_t Steam::getAvailableP2PPacketSize(int nChannel) {
 		return 0;
 	}
 	uint32_t cubMsgSize = 0;
-	return cubMsgSize ? (SteamNetworking()->IsP2PPacketAvailable(&cubMsgSize, nChannel)) : 0;
+	return (SteamNetworking()->IsP2PPacketAvailable(&cubMsgSize, nChannel)) ? cubMsgSize : 0;
 }
 
 /**
