@@ -106,6 +106,8 @@ class Steam : public Reference {
 		int getFriendCount();
 		String getPersonaName();
 		String getFriendPersonaName(uint64_t steamID);
+		Dictionary getFriendGamePlayedD(uint64_t steamID);
+		Array getFriendGameLobbies();
 		void setGameInfo(String key, String value);
 		void clearGameInfo();
 		void inviteFriend(uint64_t id, String connectString);
@@ -404,6 +406,8 @@ class Steam : public Reference {
 			register_method("getFriendCount", &Steam::getFriendCount);
 			register_method("getPersonaName", &Steam::getPersonaName);
 			register_method("getFriendPersonaName", &Steam::getFriendPersonaName);
+			register_method("getFriendGamePlayedD", &Steam::getFriendGamePlayedD);
+			register_method("getFriendGameLobbies", &Steam::getFriendGameLobbies);
 			register_method("setGameInfo", &Steam::setGameInfo);
 			register_method("clearGameInfo", &Steam::clearGameInfo);
 			register_method("inviteFriend", &Steam::inviteFriend);
