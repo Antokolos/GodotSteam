@@ -121,7 +121,7 @@ class Steam : public Reference {
 		void activateGameOverlayToUser(String type, uint64_t steamID);
 		void activateGameOverlayToWebPage(String url);
 		void activateGameOverlayToStore(AppId_t appID=0);
-		void activateGameOverlayInviteDialog(int steamID);
+		void activateGameOverlayInviteDialog(uint64_t lobbyID);
 		// Matchmaking //////////////////////////////
 		void createLobby(int lobbyType, int maxMembers);
 		void addRequestLobbyListDistanceFilter(int lobbyDistanceFilterValue);
@@ -306,6 +306,7 @@ class Steam : public Reference {
 		CCallResult<Steam, SteamServersDisconnected_t> callServerDisconnected;
 		void _server_disconnected(SteamServersDisconnected_t *callData);
 		STEAM_CALLBACK(Steam, _lobby_data_update, LobbyDataUpdate_t, lobbyDataUpdate);
+		STEAM_CALLBACK(Steam, _game_lobby_join_requested, GameLobbyJoinRequested_t, gameLobbyJoinRequested);
 		// P2P callbacks
 		STEAM_CALLBACK(Steam, _p2p_session_request, P2PSessionRequest_t, callSessionRequest);
 		STEAM_CALLBACK(Steam, _p2p_session_connect_fail, P2PSessionConnectFail_t, callSessionConnectFail);
@@ -594,6 +595,11 @@ class Steam : public Reference {
 			args["steamIDLobby"] = Variant::INT;
 			args["steamIDMember"] = Variant::INT;
 			register_signal<Steam>("lobby_data_update", args);
+			args.clear();
+
+			args["steamIDLobby"] = Variant::INT;
+			args["steamIDFriend"] = Variant::INT;
+			register_signal<Steam>("game_lobby_join_requested", args);
 			args.clear();
 
 			register_signal<Steam>("lobby_match_list");
