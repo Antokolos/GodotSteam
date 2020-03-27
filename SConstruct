@@ -103,7 +103,7 @@ if target_platform == 'osx':
 	env.Append(LINKFLAGS = [ '-arch', 'x86_64', '-framework', 'Cocoa', '-Wl,-undefined,dynamic_lookup' ])
 	env.Append(RPATH=env.Literal("\\$$ORIGIN"))
 	# Set correct Steam library
-	steam_lib_path += "/osx32"
+	steam_lib_path += "/osx"
 	# Attach the CPP bindings lib
 	env.Append(LIBS = [ 'libgodot-cpp.' + target_platform + '.' + target_arch + '.a' ])
 # Append the last paths
