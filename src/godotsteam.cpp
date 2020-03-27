@@ -111,7 +111,7 @@ uint32 Steam::getServerPublicIP() {
 	if (SteamGameServer() == NULL) {
 		return 0;
 	}
-	return SteamGameServer()->GetPublicIP();
+	return SteamGameServer()->GetPublicIP().m_unIPv4;
 }
 void Steam::_steam_servers_connected(SteamServersConnected_t *pLogonSuccess) {
 	printf("Connected to Steam successfully\n");
