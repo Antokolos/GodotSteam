@@ -1002,7 +1002,6 @@ Dictionary Steam::readP2PPacket(uint32_t cubDest, int nChannel) {
 	}
 	return result;
 }
-
 /**
  * Sends a P2P packet to the specified user.
  * This is a session-less API which automatically establishes NAT-traversing or Steam relay server connections.
@@ -1334,7 +1333,7 @@ String Steam::getLobbyMemberData(uint64_t steamIDLobby, uint64_t steamIDUser, St
 	}
 	return SteamMatchmaking()->GetLobbyMemberData(createSteamID(steamIDLobby), createSteamID(steamIDUser), key.utf8().get_data());
 }
-/** 
+/**
  * Triggers on calls to CreateLobby, JoinLobby, SetLobbyMemberData, RequestLobbyData, SetLobbyOwner.
  * If steamIDMember is a user in the lobby, then use GetLobbyMemberData to access per-user details;
  * otherwise, if steamIDMember == steamIDLobby, use GetLobbyData to access the lobby metadata.
